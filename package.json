@@ -14,6 +14,7 @@
   "license": "MIT",
   "devDependencies": {
     "body-parser": "^1.17.2",
+    "bson-objectid": "^1.1.5",
     "koa-better-body": "^3.0.4",
     "koa-body": "^2.3.0",
     "koa-mongoose": "^2.0.0",

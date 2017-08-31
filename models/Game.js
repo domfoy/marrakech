@@ -3,12 +3,7 @@ const mongoose = require('mongoose'),
 
 mongoose.Promise = Promise;
 
-const Directions = {
-  right: 'RIGHT',
-  up: 'UP',
-  left: 'LEFT',
-  down: 'DOWN'
-};
+const {Directions, ActionTypes} = require('./Consts.js');
 
 const gameSchema = new mongoose.Schema({
   currentTurn: {type: Number},
@@ -16,7 +11,16 @@ const gameSchema = new mongoose.Schema({
     direction: {type: String, enum: _.values(Directions)},
     x: {type: Number, min: 1, max: 7},
     y: {type: Number, min: 1, max: 7}
-  }
+  },
+  actions: [{
+    id: ObjectId,
+    meta: {
+      turnId: {type: Number},
+      playerId: {type: Number, min: 0, max: 3}
+    },
+    type: {type: String, enum: _.values(ActionTypes)},
+    payload: Object
+  }]
 }, {
   toObject: {
     retainKeyOrder: true,
@@ -31,6 +35,5 @@ const gameSchema = new mongoose.Schema({
 const Game = mongoose.model('Game', gameSchema);
 
 module.exports = {
-  Game,
-  Directions
+  Game
 };
