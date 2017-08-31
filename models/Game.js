@@ -9,18 +9,9 @@ const gameSchema = new mongoose.Schema({
   currentTurn: {type: Number},
   assam: {
     direction: {type: String, enum: _.values(Directions)},
-    x: {type: Number, min: 1, max: 7},
-    y: {type: Number, min: 1, max: 7}
+    position: positionSchema
   },
-  actions: [{
-    id: ObjectId,
-    meta: {
-      turnId: {type: Number},
-      playerId: {type: Number, min: 0, max: 3}
-    },
-    type: {type: String, enum: _.values(ActionTypes)},
-    payload: Object
-  }]
+  actions: [actionSchema]
 }, {
   toObject: {
     retainKeyOrder: true,

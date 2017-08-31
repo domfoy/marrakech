@@ -13,8 +13,14 @@
   "author": "petermccallauway",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.7.0"
+  },
+  "dependencies": {
     "body-parser": "^1.17.2",
     "bson-objectid": "^1.1.5",
+    "koa": "^2.3.0",
     "koa-better-body": "^3.0.4",
     "koa-body": "^2.3.0",
     "koa-mongoose": "^2.0.0",

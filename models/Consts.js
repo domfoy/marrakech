@@ -1,6 +1,6 @@
 const ActionTypes = {
   orientAssam: 'ORIENT_ASSAM',
-  addTile: 'ADD_TILE'
+  addCarpet: 'ADD_CARPET'
 };
 
 const Directions = {
@@ -10,7 +10,23 @@ const Directions = {
   down: 'DOWN'
 };
 
+const TurnPhases = Object.assign({
+  payTax: 'PAY_TAX',
+  drawDice: 'DRAW_DICE',
+  moveAssam: 'MOVE_ASSAM'
+}, ActionTypes);
+
+const TurnPhasesOrder = [
+  'orientAssam',
+  'drawDice',
+  'moveAssam',
+  'payTax',
+  'addCarpet'
+];
+
 module.exports = {
   ActionTypes,
-  Directions
+  Directions,
+  TurnPhases,
+  TurnPhasesOrder
 }

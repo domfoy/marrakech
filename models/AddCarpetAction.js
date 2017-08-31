@@ -4,11 +4,11 @@ const mongoose = require('mongoose'),
 const {positionSchema} = require('./Position.js');
 const {ActionTypes} = require('./Consts.js');
 
-const addTileAction = {
+const addCarpetAction = {
   type: {
     type: String,
-    default: ActionTypes.addTile,
-    enums: [ActionTypes.addTile]
+    default: ActionTypes.addCarpet,
+    enums: [ActionTypes.addCarpet]
   },
   payload: {
     positions: {
@@ -20,13 +20,13 @@ const addTileAction = {
   }
 };
 
-const addTileActionSchema = new mongoose.Schema(addTileAction, {
+const addCarpetActionSchema = new mongoose.Schema(addCarpetAction, {
   _id: false,
   discriminatorKey: 'kind'
 });
 
-const AddTileActionAction = Action.discriminator('AddTileActionAction', addTileActionSchema);
+const AddCarpetAction = Action.discriminator('AddCarpetAction', addCarpetActionSchema);
 
 module.exports = {
-  AddTileActionAction
+  AddCarpetAction
 };

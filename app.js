@@ -1,6 +1,6 @@
-const Koa = require('koa'),
-      body = require('koa-body'),
-      Router = require('koa-router');
+const Koa = require('koa');
+const body = require('koa-body');
+const Router = require('koa-router');
 
 const init = require('./lib/init.js');
 const {assam} = require('./lib/api');

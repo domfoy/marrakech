@@ -16,7 +16,9 @@ function init() {
         playerId: 0
       },
       type: ActionTypes.orientAssam,
-      payload: {}
+      payload: {
+        assamDirection: Directions.up
+      }
     }]
   });
 
