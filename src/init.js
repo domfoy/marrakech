@@ -1,30 +1,24 @@
-const ObjectID = require("bson-objectid");
-
-const {Game, Directions, ActionTypes} = require('../models/Game.js');
+const {Directions} = require('../models');
+const Game = require('mongoose').model('Game');
+const Position = require('mongoose').model('Position');
+const OrientAssamAction = require('mongoose').model('OrientAssamAction');
 
 function init() {
   const game = new Game({
     currentTurn: 0,
     assam: {
       direction: Directions.up,
-      x: 3,
-      y: 3
+      position: new Position({x: 3, y: 3})
     },
-    actions: [{
+    actions: [new OrientAssamAction({
       meta: {
         turnId: 0,
         playerId: 0
-      },
-      type: ActionTypes.orientAssam,
-      payload: {
-        assamDirection: Directions.up
       }
-    }]
+    })]
   });
 
-  return game.save().then((savedGame) => {
-    return savedGame;
-  });
+  return game.save();
 }
 
 module.exports = init;

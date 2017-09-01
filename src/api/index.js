@@ -1,5 +1,5 @@
-const assam = require('./assam.js');
+const action = require('./action.js');
 
 module.exports = {
-  assam
+  action
 };

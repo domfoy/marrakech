@@ -1,25 +1,28 @@
+const _ = require('lodash');
+
 const router = require('koa-router')();
 
-const {Game} = require('../../models/Game');
-
-router.get('/:id', displayAction);
-router.put('/:id', setAction);
-router.post('/:id/next', computeNextAction);
-
 function displayAction(ctx) {
-  ctx.response.body = ctx.game.assam.toObject();
+  ctx.response.body = ctx.game.getCurrentAction().toObject();
 }
 
-async function changeAssam(ctx, next) {
-  ctx.game.assam = ctx.request.body;
+async function setAction(ctx) {
+  const currentAction = _.last(ctx.game.actions);
 
-  const newGame = await ctx.game.save();
+  currentAction.payload = ctx.request.body;
 
-  ctx.response.body = newGame.assam.toObject();
+  await ctx.game.save();
+
+  ctx.response.body = ctx.game.getCurrentAction().toObject();
 }
 
-async function computeNextAction(ctx, next) {
-  
-}
+// async function computeNextAction(ctx) {
+//
+// }
+
+router.get('/current', displayAction);
+router.get('/:id', fetchAction);
+router.put('/:id', setAction);
+// router.post('/:id/next', computeNextAction);
 
 module.exports = router;

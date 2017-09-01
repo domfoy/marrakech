@@ -1,6 +1,6 @@
 const ActionTypes = {
   orientAssam: 'ORIENT_ASSAM',
-  addCarpet: 'ADD_CARPET'
+  layRug: 'ADD_CARPET'
 };
 
 const Directions = {
@@ -21,7 +21,7 @@ const TurnPhasesOrder = [
   'drawDice',
   'moveAssam',
   'payTax',
-  'addCarpet'
+  'layRug'
 ];
 
 module.exports = {
@@ -29,4 +29,4 @@ module.exports = {
   Directions,
   TurnPhases,
   TurnPhasesOrder
-}
+};

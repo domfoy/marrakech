@@ -1,16 +1,21 @@
 const mongoose = require('mongoose'),
       _ = require('lodash');
 
-const {ActionTypes, Directions} = require('./Consts.js');
+const {Action} = require('./Action.js');
+const {Directions, ActionTypes} = require('./Consts.js');
 
 const orientAssamAction = {
   type: {
-    type: String, 
-    set: v => ActionTypes.orientAssam,
-    get: v => ActionTypes.orientAssam
+    type: String,
+    default: ActionTypes.orientAssam,
+    enums: [ActionTypes.orientAssam]
   },
   payload: {
-    assamDirection: {type: String, enum: _.values(Directions)}
+    assamDirection: {
+      type: String,
+      enum: _.values(Directions),
+      required: true
+    }
   }
 };
 

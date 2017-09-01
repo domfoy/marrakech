@@ -1,10 +1,14 @@
-const mongoose = require('mongoose');
+const config = require('config');
+
+const db = require('../db.js');
 const initApp = require('../app.js');
 
-mongoose.connect('mongodb://localhost/my-app',
-  {useMongoClient: true}
-)
-.then(db => initApp(db))
-.then(app => {
-  app.listen(8082);
-});
+
+db.connect()
+  .then(initApp)
+  .then((app) => {
+    app.listen(config.port);
+  })
+  .catch((err) => {
+    console.error(err);
+  });

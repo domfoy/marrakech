@@ -1,19 +1,23 @@
+const mongoose = require('mongoose');
+
 const coordinateType = {
   type: Number,
-  required: true
-  set: (v) => Math.round(v) % 7
-}
+  required: true,
+  set: v => Math.round(v) % 7
+};
 
 const positionSchema = new mongoose.Schema({
   x: coordinateType,
-  y: coordinateType,
+  y: coordinateType
 }, {
-  _id: false
+  _id: false,
+  bufferCommands: false
 });
 
-const Position = new mongoose.Model('Position', positionSchema);
+const Position = mongoose.model('Position', positionSchema);
+console.log('devrait  etre avant');
 
 module.export = {
-  positionSchema,
-  Position
+  Position,
+  positionSchema
 };
