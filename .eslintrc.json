@@ -6,6 +6,9 @@
     "one-var": 0,
     "indent": ["error", 2, { "VariableDeclarator": 3 }],
     "arrow-body-style": 0,
-    "no-unused-expressions": 0
+    "block-spacing": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-expressions": 0,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
   }
 }

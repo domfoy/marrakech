@@ -15,7 +15,6 @@ const positionSchema = new mongoose.Schema({
 });
 
 const Position = mongoose.model('Position', positionSchema);
-console.log('devrait  etre avant');
 
 module.export = {
   Position,

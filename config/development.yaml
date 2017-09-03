@@ -1,2 +1,2 @@
-dbUrl: mongodb://localhost:27017/test
+dbUrl: mongodb://localhost:27017/dev
 port: 8082

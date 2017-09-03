@@ -1,4 +1,4 @@
-const {Directions} = require('../models');
+const {Directions} = require('../../../models');
 const Game = require('mongoose').model('Game');
 const Position = require('mongoose').model('Position');
 const OrientAssamAction = require('mongoose').model('OrientAssamAction');
@@ -21,4 +21,14 @@ function init() {
   return game.save();
 }
 
-module.exports = init;
+function terminate(gameId) {
+  if (!gameId) {
+    return Promise.resolve();
+  }
+  return Game.findByIdAndRemove(gameId);
+}
+
+module.exports = {
+  init,
+  terminate
+};

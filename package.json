@@ -5,7 +5,7 @@
   "main": "bin/server.js",
   "scripts": {
     "start": "node bin/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/ava",
     "lint": "./node_modules/.bin/eslint  ."
   },
   "keywords": [
@@ -14,9 +14,12 @@
   "author": "petermccallauway",
   "license": "MIT",
   "devDependencies": {
+    "ava": "^0.22.0",
     "eslint": "^4.5.0",
     "eslint-config-airbnb-base": "^11.3.2",
-    "eslint-plugin-import": "^2.7.0"
+    "eslint-plugin-import": "^2.7.0",
+    "supertest": "^3.0.0",
+    "supertest-koa-agent": "^0.3.0"
   },
   "dependencies": {
     "body-parser": "^1.17.2",

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'),
       _ = require('lodash');
 
-console.log('devrait  etre apres');
 const positionSchema = require('mongoose').model('Position').schema;
 const actionSchema = require('mongoose').model('Action').schema;
 
