@@ -4,6 +4,8 @@ const mongoose = require('mongoose'),
 const {Action} = require('./Action.js');
 const {Directions, ActionTypes} = require('./Consts.js');
 
+const directionAsArray = _.values(Directions);
+
 const orientAssamAction = {
   type: {
     type: String,
@@ -11,9 +13,9 @@ const orientAssamAction = {
     enums: [ActionTypes.orientAssam]
   },
   payload: {
-    assamDirection: {
+    direction: {
       type: String,
-      enum: _.values(Directions),
+      enum: directionAsArray,
       required: true
     }
   }

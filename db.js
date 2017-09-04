@@ -8,14 +8,7 @@ const config = require('config');
 mongoose.Promise = Promise;
 
 function connect() {
-  return mongoose.connect(config.dbUrl, {useMongoClient: true})
-    .then(() => {
-
-      // fs.readdirSync('./models').forEach((file) => {
-      //   console.log('read', file);
-      //   require('./models/' + file);
-      // });
-    });
+  return mongoose.connect(config.dbUrl, {useMongoClient: true});
 }
 
 function disconnect() {

@@ -4,28 +4,57 @@ const mongoose = require('mongoose'),
 const positionSchema = require('mongoose').model('Position').schema;
 const actionSchema = require('mongoose').model('Action').schema;
 
-// const {positionSchema} = require('./Position.js');
-// const {actionSchema} = require('./Action.js');
 const {Directions} = require('./Consts.js');
 
-// console.log('test', positionSchema);
+const directionAsArray = _.values(Directions);
+
+function validateActions(v) {
+  const currentAction = _.last(v);
+
+  const isOK = currentAction.validateSync();
+  if (!isOK) {
+    return false;
+  }
+  if (currentAction.type === 'ORIENT_ASSAM') {
+    const assamDirection = _.indexOf(directionAsArray, this.assam.direction);
+
+    const assamOppositeDirection = (assamDirection + 2) % 4;
+
+    if (!_.get(currentAction, 'payload.direction')) {
+      return false;
+    }
+
+    const actionDirection = _.indexOf(directionAsArray, currentAction.payload.direction);
+
+    if (actionDirection < 0) {
+      return false;
+    }
+
+    console.log('assam', actionDirection, 'opposite', assamOppositeDirection);
+    return actionDirection !== assamOppositeDirection;
+  }
+
+  return true;
+}
+
 const gameSchema = new mongoose.Schema({
-  currentTurn: {type: Number},
+  currentTurn: {type: Number, min: 0},
   assam: {
-    direction: {type: String, enum: _.values(Directions)},
+    direction: {type: String, enum: directionAsArray},
     position: positionSchema
   },
-  actions: [actionSchema]
+  actions: {
+    type: [actionSchema],
+    validate: {
+      isAsync: false,
+      validator: validateActions,
+      message: 'Default error message'
+    }
+  }
 }, {
   bufferCommands: false,
   toObject: {
     retainKeyOrder: true
-    // transform: (doc, ret) => Object.assign(
-    //   {
-    //     assam: _.pick(_.get(ret, 'assam'), 'direction', 'x', 'y')
-    //   },
-    //   _.pick(ret, 'currentTurn')
-    // )
   }
 });
 
