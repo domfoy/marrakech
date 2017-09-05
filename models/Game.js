@@ -11,10 +11,6 @@ const directionAsArray = _.values(Directions);
 function validateActions(v) {
   const currentAction = _.last(v);
 
-  const isOK = currentAction.validateSync();
-  if (!isOK) {
-    return false;
-  }
   if (currentAction.type === 'ORIENT_ASSAM') {
     const assamDirection = _.indexOf(directionAsArray, this.assam.direction);
 
@@ -30,7 +26,6 @@ function validateActions(v) {
       return false;
     }
 
-    console.log('assam', actionDirection, 'opposite', assamOppositeDirection);
     return actionDirection !== assamOppositeDirection;
   }
 
@@ -48,7 +43,7 @@ const gameSchema = new mongoose.Schema({
     validate: {
       isAsync: false,
       validator: validateActions,
-      message: 'Default error message'
+      message: 'Invalid action'
     }
   }
 }, {

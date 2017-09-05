@@ -29,7 +29,7 @@ test('ping should respond', (t) => {
     });
 });
 
-test.only('should init a new game', (t) => {
+test('should init a new game', (t) => {
   t.plan(1);
 
   return request(server)
@@ -62,7 +62,7 @@ test('should display first action', async (t) => {
     });
 });
 
-test('should set current action', async (t) => {
+test.only('should set current action', async (t) => {
   t.plan(1);
 
   const gameId = await request(server)
@@ -79,6 +79,34 @@ test('should set current action', async (t) => {
 
   return request(server)
     .put(`/game/${gameId}/action/${currentActionId}`)
+    .send({
+      direction: 'LEFTu'
+    })
+    .expect(200)
+    .then((response) => {
+      const body = response.body;
+
+      t.is(body.payload.direction, 'LEFT');
+    });
+});
+
+test.only('should post action', async (t) => {
+  t.plan(1);
+
+  const gameId = await request(server)
+    .post('/game')
+    .expect(201)
+    .then(response => response.body._id);
+
+  gameIds.push(gameId);
+
+  const currentActionId = await request(server)
+    .get(`/game/${gameId}/action/current`)
+    .expect(200)
+    .then(response => response.body._id);
+
+  return request(server)
+    .post(`/game/${gameId}/action/${currentActionId}/next`)
     .send({
       direction: 'LEFT'
     })
