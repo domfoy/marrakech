@@ -1,6 +1,6 @@
 const ActionTypes = {
   orientAssam: 'ORIENT_ASSAM',
-  layRug: 'ADD_CARPET'
+  layRug: 'LAY_RUG'
 };
 
 const Directions = {
@@ -24,9 +24,18 @@ const TurnPhasesOrder = [
   'layRug'
 ];
 
+const Colours = {
+  none: '',
+  blue: 'BLUE',
+  yellow: 'YELLOW',
+  red: 'RED',
+  brown: 'BROWN'
+};
+
 module.exports = {
   ActionTypes,
   Directions,
   TurnPhases,
-  TurnPhasesOrder
+  TurnPhasesOrder,
+  Colours
 };

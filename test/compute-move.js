@@ -1,10 +1,11 @@
 const test = require('ava');
 
-const {computeNextAssam} = require('../src/core/game-logic.js'),
+const {computeNextAssam} = require('../src/core/lib'),
       {Directions} = require('../models/Consts.js');
 
 const tests = [
-  // [[3, 3, Directions.up, 2], [3, 5, Directions.up]],
+  // [input, expectation]
+  // [[x, y, direction, shift], [x, y, direction]],
   [[2, 6, Directions.left, 3], [0, 6, Directions.down]],
   [[2, 2, Directions.left, 3], [0, 3, Directions.right]],
   [[1, 3, Directions.left, 4], [2, 2, Directions.right]],
@@ -18,7 +19,7 @@ const tests = [
   [[2, 6, Directions.up, 3], [1, 4, Directions.down]]
 ];
 
-test('moves', (t) => {
+test('should move assam to the correct state', (t) => {
   t.plan(tests.length);
 
   for (let i = 0; i < tests.length; i += 1) {

@@ -26,6 +26,9 @@ const layRugActionSchema = new mongoose.Schema(LayRugActionSchemaObject, {
   discriminatorKey: 'kind'
 });
 
+layRugActionSchema.methods.computeNextAction = function computeNextAction() {
+};
+
 const LayRugAction = Action.discriminator('LayRugAction', layRugActionSchema);
 
 module.exports = {
