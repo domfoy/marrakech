@@ -1,7 +1,3 @@
-// const fs = require('fs');
-require('./models');
-
-
 const mongoose = require('mongoose');
 const config = require('config');
 

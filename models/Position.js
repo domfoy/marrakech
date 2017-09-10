@@ -6,17 +6,14 @@ const coordinateType = {
   set: v => Math.round(v) % 7
 };
 
-const positionSchema = new mongoose.Schema({
-  x: coordinateType,
-  y: coordinateType
-}, {
-  _id: false,
-  bufferCommands: false
-});
+module.exports = function registerPosition() {
+  const positionSchema = new mongoose.Schema({
+    x: coordinateType,
+    y: coordinateType
+  }, {
+    _id: false,
+    bufferCommands: false
+  });
 
-const Position = mongoose.model('Position', positionSchema);
-
-module.export = {
-  Position,
-  positionSchema
+  mongoose.model('Position', positionSchema);
 };

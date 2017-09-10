@@ -1,3 +1,5 @@
+require('./register-models');
+
 const Koa = require('koa');
 const body = require('koa-body');
 const Router = require('koa-router');

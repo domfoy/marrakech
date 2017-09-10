@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-const {Action} = require('./Action.js');
 const {positionSchema} = require('./Position.js');
 const {ActionTypes} = require('./Consts.js');
 
@@ -21,16 +20,13 @@ const LayRugActionSchemaObject = {
   }
 };
 
-const layRugActionSchema = new mongoose.Schema(LayRugActionSchemaObject, {
-  _id: false,
-  discriminatorKey: 'kind'
-});
+module.exports = function registerLayRugAction() {
+  const layRugActionSchema = new mongoose.Schema(LayRugActionSchemaObject, {
+    _id: false
+  });
 
-layRugActionSchema.methods.computeNextAction = function computeNextAction() {
-};
+  layRugActionSchema.methods.computeNextAction = function computeNextAction() {
+  };
 
-const LayRugAction = Action.discriminator('LayRugAction', layRugActionSchema);
-
-module.exports = {
-  LayRugAction
+  mongoose.model('__LayRugAction', layRugActionSchema);
 };

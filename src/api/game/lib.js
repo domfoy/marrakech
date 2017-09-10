@@ -3,7 +3,6 @@ const _ = require('lodash');
 const {Directions} = require('../../../models');
 const Game = require('mongoose').model('Game');
 const Position = require('mongoose').model('Position');
-const OrientAssamAction = require('mongoose').model('OrientAssamAction');
 
 function init() {
   const game = new Game({
@@ -47,7 +46,8 @@ function init() {
         colours: [3, 4]
       }
     ],
-    actions: [new OrientAssamAction({
+    actions: [{
+      kind: 'OrientAssamAction',
       meta: {
         turnId: 0,
         playerId: 0
@@ -56,7 +56,7 @@ function init() {
       payload: {
         direction: 'UP'
       }
-    })]
+    }]
   });
 
   return game.save();

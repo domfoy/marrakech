@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'),
       _ = require('lodash');
 
-const {Action} = require('./Action.js');
 const {Directions, ActionTypes} = require('./Consts.js');
 
 const directionAsArray = _.values(Directions);
@@ -24,17 +23,32 @@ const orientAssamAction = {
   }
 };
 
-const orientAssamActionSchema = new mongoose.Schema(orientAssamAction, {
-  _id: false,
-  discriminatorKey: 'kind'
-});
+module.exports = function registerOrientAssamAction() {
+  const orientAssamActionSchema = new mongoose.Schema(orientAssamAction, {
+    _id: false
+  });
 
-orientAssamActionSchema.methods.computeNextAction = function computeNextAction(game) {
-  return orientAssamPostProcess(game);
-};
+  orientAssamActionSchema.methods.validateAction = function validateAction(game) {
+    const assamDirection = _.indexOf(directionAsArray, game.assam.direction);
 
-const OrientAssamAction = Action.discriminator('OrientAssamAction', orientAssamActionSchema);
+    const assamOppositeDirection = (assamDirection + 2) % 4;
 
-module.exports = {
-  OrientAssamAction
+    if (!_.get(this, 'payload.direction')) {
+      return false;
+    }
+
+    const actionDirection = _.indexOf(directionAsArray, this.payload.direction);
+
+    if (actionDirection < 0) {
+      return false;
+    }
+
+    return actionDirection !== assamOppositeDirection;
+  };
+
+  orientAssamActionSchema.methods.computeNextAction = function computeNextAction(game) {
+    return orientAssamPostProcess(game);
+  };
+
+  mongoose.model('__OrientAssamAction', orientAssamActionSchema);
 };
