@@ -6,22 +6,22 @@ const LIMITS = {
 };
 
 module.exports = {
-  computeNextAssam
+  moveAssam
 };
 
-function computeNextAssam(assam, draw) {
-  const {x, y, direction} = _computeNextAssam(assam, draw);
+function moveAssam(assam, draw) {
+  const {x, y, direction} = _moveAssam(assam, draw);
 
-  return {
+  Object.assign(assam, {
     direction,
     position: {
       x,
       y
     }
-  };
+  });
 }
 
-function _computeNextAssam(assam, draw) {
+function _moveAssam(assam, draw) {
   const {dx, dy} = computeUnitStep(assam.direction);
 
   const directMove = {

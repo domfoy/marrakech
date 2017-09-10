@@ -7,7 +7,7 @@ module.exports = function registerAction() {
   const actionSchema = new mongoose.Schema({
     meta: {
       turnId: {type: Number},
-      playerId: {type: Number, min: 0, max: 3}
+      playerId: {type: Number, min: 1, max: 4}
     },
     type: {
       type: String,

@@ -27,9 +27,9 @@ module.exports = function registerGame() {
         default: new Array(49).join('0').split('').map(parseFloat),
         validate: v => v.length === 49
       },
-      playersDomains: {
+      colourDomains: {
         type: [{
-          playerId: {type: Number, min: 1, max: 4},
+          colourId: {type: Number, min: 1, max: 4},
           domains: [{
             size: {type: Number, min: 0, max: 49},
             cells: {

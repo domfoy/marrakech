@@ -15,9 +15,9 @@ function init() {
     },
     board: {
       layer: Array.from('0'.repeat(49)).map(parseFloat),
-      playersDomains: [
+      colourDomains: [
         {
-          playerId: 1,
+          colourId: 1,
           domains: [
             {
               size: 0,
@@ -26,7 +26,25 @@ function init() {
           ]
         },
         {
-          playerId: 2,
+          colourId: 2,
+          domains: [
+            {
+              size: 0,
+              cells: []
+            }
+          ]
+        },
+        {
+          colourId: 3,
+          domains: [
+            {
+              size: 0,
+              cells: []
+            }
+          ]
+        },
+        {
+          colourId: 4,
           domains: [
             {
               size: 0,
@@ -49,8 +67,8 @@ function init() {
     actions: [{
       kind: 'OrientAssamAction',
       meta: {
-        turnId: 0,
-        playerId: 0
+        turnId: 1,
+        playerId: 1
       },
       type: 'ORIENT_ASSAM',
       payload: {
