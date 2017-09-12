@@ -32,10 +32,13 @@ const Colours = {
   brown: 'BROWN'
 };
 
+const BOARD_LENGTH = 7;
+
 module.exports = {
   ActionTypes,
   Directions,
   TurnPhases,
   TurnPhasesOrder,
-  Colours
+  Colours,
+  BOARD_LENGTH
 };

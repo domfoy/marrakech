@@ -27,7 +27,7 @@ module.exports = function registerGame() {
         default: new Array(49).join('0').split('').map(parseFloat),
         validate: v => v.length === 49
       },
-      colourDomains: {
+      coloursDomains: {
         type: [{
           colourId: {type: Number, min: 1, max: 4},
           domains: [{
@@ -90,7 +90,7 @@ module.exports = function registerGame() {
 
     assert(lastAction, 'No action found in game');
 
-    lastAction.computeNextAction(this);
+    return lastAction.computeNextAction(this);
   };
 
   mongoose.model('Game', gameSchema);

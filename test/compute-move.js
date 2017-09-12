@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const {computeNextAssam} = require('../src/core/lib'),
+const {moveAssam} = require('../src/core/lib'),
       {Directions} = require('../models/Consts.js');
 
 const tests = [
@@ -39,6 +39,6 @@ test('should move assam to the correct state', (t) => {
         y: tests[i][1][1]
       }
     };
-    t.deepEqual(computeNextAssam(assam, draw), expectation);
+    t.deepEqual(moveAssam(assam, draw), expectation, `on iteration ${i}`);
   }
 });

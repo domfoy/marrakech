@@ -1,24 +1,30 @@
-const {Directions} = require('../../../models/Consts.js');
+const _ = require('lodash');
 
+const {BOARD_LENGTH, Directions} = require('../../../models/Consts.js');
+
+const NEUTRAL_COLOR = 0;
+const NO_TAX = 0;
 const LIMITS = {
   LOWER: 0,
   UPPER: 6
 };
 
 module.exports = {
-  moveAssam
+  moveAssam,
+  payTax,
+  formatResponse
 };
 
 function moveAssam(assam, draw) {
   const {x, y, direction} = _moveAssam(assam, draw);
 
-  Object.assign(assam, {
+  return {
     direction,
     position: {
       x,
       y
     }
-  });
+  };
 }
 
 function _moveAssam(assam, draw) {
@@ -153,4 +159,49 @@ function computeUnitStep(direction) {
   default:
     throw new Error('Invalid assam direction');
   }
+}
+
+function payTax(game, newAssam) {
+  const assamPosition = newAssam.position;
+
+  const cell = (assamPosition.y * BOARD_LENGTH) + assamPosition.x;
+
+  const colourId = game.board.layer[cell];
+
+  if (colourId === NEUTRAL_COLOR) {
+    return NO_TAX;
+  }
+
+  const creditorId = _.findIndex(game.players, p => p.colours.includes(colourId)) + 1;
+
+  const debtorId = _.last(game.actions).meta.playerId;
+  if (creditorId === debtorId) {
+    return NO_TAX;
+  }
+
+  const involvedColourDomains = _.find(game.board.coloursDomains, ds => ds.colourId === colourId);
+  const involvedColourDomain = _.find(involvedColourDomains.domains, d => d.includes(cell));
+  const taxAmount = involvedColourDomain.length;
+
+  return {
+    debtorId,
+    creditorId,
+    amount: taxAmount
+  };
+}
+
+function formatResponse(assam, tax) {
+  if (tax === NO_TAX) {
+    return {
+      assam,
+      tax: {
+        amount: 0
+      }
+    };
+  }
+
+  return {
+    assam,
+    tax
+  };
 }

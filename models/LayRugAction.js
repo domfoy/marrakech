@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const {positionSchema} = require('./Position.js');
 const {ActionTypes} = require('./Consts.js');
+const {layRugPostProcess} = require('../src/core/game-logic.js');
 
 const LayRugActionSchemaObject = {
   type: {
@@ -26,6 +27,7 @@ module.exports = function registerLayRugAction() {
   });
 
   layRugActionSchema.methods.computeNextAction = function computeNextAction() {
+    return layRugPostProcess(this);
   };
 
   mongoose.model('__LayRugAction', layRugActionSchema);

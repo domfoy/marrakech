@@ -51,15 +51,7 @@ async function trySave(ctx) {
 }
 
 async function addNextAction(ctx) {
-  // if (ctx.request.body) {
-  //   const currentAction = _.last(ctx.state.game.actions);
-  //   currentAction.set('payload', ctx.request.body);
-  //   await trySave(ctx);
-  // }
+  const payload = await ctx.state.game.computeNextAction();
 
-  await ctx.state.game.computeNextAction();
-
-  ctx.response.body = {
-    payload: _.pick(ctx.state.game, ['assam', 'players'])
-  };
+  ctx.response.body = payload;
 }

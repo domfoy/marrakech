@@ -2,18 +2,18 @@ const assert = require('assert');
 
 const _ = require('lodash');
 
-const BOARD_LENGTH = 7;
+const {BOARD_LENGTH} = require('../../../models/Consts.js');
 
 module.exports = {
-  computePlayersDomains
+  computeColoursDomains
 };
 
-function computePlayersDomains(layer) {
+function computeColoursDomains(layer) {
   assert(layer && layer.length === BOARD_LENGTH * BOARD_LENGTH, 'No valid layer.');
 
   const reorderedLayer = _.concat([], ..._(layer).chunk(BOARD_LENGTH).reverse().value());
 
-  return _.reduce(reorderedLayer,
+  const rawColoursDomains = _.reduce(reorderedLayer,
     (cur, cell, i) => {
       if (cell === 0) {
         return cur;
@@ -29,7 +29,6 @@ function computePlayersDomains(layer) {
 
       if (neighbouringDomainsIndexes.length === 0) {
         cur[cell].push({
-          size: 1,
           cells: [i]
         });
 
@@ -66,6 +65,13 @@ function computePlayersDomains(layer) {
       return cur;
     },
     {}
+  );
+
+  return _.map(rawColoursDomains,
+    (domains, colourId) => ({
+      colourId: parseInt(colourId, 10),
+      domains: _.map(domains, d => d.cells)
+    })
   );
 }
 

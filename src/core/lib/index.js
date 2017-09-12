@@ -1,9 +1,11 @@
-const {computeNextAssam} = require('./assam.js');
-const {computePlayersDomains} = require('./board.js');
+const {moveAssam, payTax, formatResponse} = require('./assam.js');
+const {computeColoursDomains} = require('./board.js');
 const {drawDice} = require('./dice.js');
 
 module.exports = {
-  computeNextAssam,
-  computePlayersDomains,
-  drawDice
+  moveAssam,
+  computeColoursDomains,
+  drawDice,
+  payTax,
+  formatResponse
 };

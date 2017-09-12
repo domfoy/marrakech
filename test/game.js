@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 const test = require('ava'),
       request = require('supertest');
 
@@ -110,6 +108,6 @@ test('should post action', async (t) => {
     .then((response) => {
       const body = response.body;
 
-      t.truthy(body.payload);
+      t.truthy(body);
     });
 });

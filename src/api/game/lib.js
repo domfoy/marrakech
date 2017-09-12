@@ -15,42 +15,22 @@ function init() {
     },
     board: {
       layer: Array.from('0'.repeat(49)).map(parseFloat),
-      colourDomains: [
+      coloursDomains: [
         {
           colourId: 1,
-          domains: [
-            {
-              size: 0,
-              cells: []
-            }
-          ]
+          domains: [[]]
         },
         {
           colourId: 2,
-          domains: [
-            {
-              size: 0,
-              cells: []
-            }
-          ]
+          domains: [[]]
         },
         {
           colourId: 3,
-          domains: [
-            {
-              size: 0,
-              cells: []
-            }
-          ]
+          domains: [[]]
         },
         {
           colourId: 4,
-          domains: [
-            {
-              size: 0,
-              cells: []
-            }
-          ]
+          domains: [[]]
         }
       ]
     },
