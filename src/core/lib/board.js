@@ -2,16 +2,17 @@ const assert = require('assert');
 
 const _ = require('lodash');
 
-const {BOARD_LENGTH} = require('../../../models/Consts.js');
+const {BOARD_SIDE_SIZE} = require('../../../models/Consts.js');
 
 module.exports = {
-  computeColoursDomains
+  computeColoursDomains,
+  computeFreeRugSpots
 };
 
 function computeColoursDomains(layer) {
-  assert(layer && layer.length === BOARD_LENGTH * BOARD_LENGTH, 'No valid layer.');
+  assert(layer && layer.length === BOARD_SIDE_SIZE * BOARD_SIDE_SIZE, 'No valid layer.');
 
-  const reorderedLayer = _.concat([], ..._(layer).chunk(BOARD_LENGTH).reverse().value());
+  const reorderedLayer = _.concat([], ..._(layer).chunk(BOARD_SIDE_SIZE).reverse().value());
 
   const rawColoursDomains = _.reduce(reorderedLayer,
     (cur, cell, i) => {
@@ -78,9 +79,9 @@ function computeColoursDomains(layer) {
 function findNeighbouringDomainsIndexes(position, domains) {
   const positionsToCheck = _.filter([
     position + 1,
-    position - BOARD_LENGTH,
+    position - BOARD_SIDE_SIZE,
     position - 1,
-    position + BOARD_LENGTH,
+    position + BOARD_SIDE_SIZE,
   ], p => p >= 0);
 
   const rawNeighbouringDomainsIndexes = _.map(positionsToCheck,
@@ -96,4 +97,92 @@ function findNeighbouringDomainsIndexes(position, domains) {
   const neighbouringDomainsIndexes = _.uniq(_.concat([], ...rawNeighbouringDomainsIndexes));
 
   return neighbouringDomainsIndexes;
+}
+
+function computeFreeRugSpots(game) {
+  const {board: {uncoveredRugs}, assam: {position}} = game;
+
+  const orientationVectors = [
+    {x: 1, y: 0},
+    {x: 0, y: 1},
+    {x: -1, y: 0},
+    {x: 0, y: -1}
+  ];
+
+  const bases = orientationVectors.map((vector, index, vectors) => {
+    return {u: vector, v: vectors[(index + 1) % 4]};
+  });
+
+  const deepSpots = bases
+    .filter((base) => {
+      const centralPosition = {
+        x: position.x + base.u.x,
+        y: position.y + base.u.y
+      };
+
+      return !isPositionOutside(centralPosition);
+    })
+    .map((base) => {
+      const centralPosition = {
+        x: position.x + base.u.x,
+        y: position.y + base.u.y
+      };
+
+      const extremities = [
+        {
+          x: position.x - base.v.x,
+          y: position.y - base.v.y
+        },
+        {
+          x: position.x + (2 * base.u.x),
+          y: position.y + (2 * base.u.y)
+        },
+        {
+          x: position.x + base.v.x,
+          y: position.y + base.v.y
+        }
+      ];
+
+      const centralPositionRugId = coveringRugId(uncoveredRugs, centralPosition);
+
+      return extremities
+        .filter((extremity) => {
+          const extremityRugId = coveringRugId(uncoveredRugs, extremity);
+          const isSameRug = extremityRugId === centralPositionRugId;
+          const hasBotheringRug = centralPositionRugId >= 0 && isSameRug;
+
+          return !(isPositionOutside(extremity) || hasBotheringRug);
+        })
+        .map(extremity => convertToSpot(centralPosition, extremity));
+    });
+
+  return _.flatten(deepSpots);
+}
+
+function coveringRugId(uncoveredRugs, position) {
+  const cell = convertToCell(position);
+  return _.findIndex(uncoveredRugs, (uncoveredRug) => {
+    return (uncoveredRug.cell1 === cell)
+        || (uncoveredRug.cell2 === cell);
+  });
+}
+
+function isPositionOutside(x, y) {
+  const tooLeft = x < 0;
+  const tooRight = x >= BOARD_SIDE_SIZE;
+  const tooLow = y < 0;
+  const tooHigh = y >= BOARD_SIDE_SIZE;
+
+  return tooLeft
+    || tooRight
+    || tooLow
+    || tooHigh;
+}
+
+function convertToSpot(position1, position2) {
+  return _.sort(convertToCell(position1), convertToCell(position2));
+}
+
+function convertToCell(position) {
+  return (position.y * BOARD_SIDE_SIZE) + position.x;
 }

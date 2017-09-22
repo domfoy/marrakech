@@ -77,11 +77,11 @@ const tests = [
 ];
 
 test('should compute domains', (t) => {
-  _.forEach(tests, (testOccurence) => {
-    const layer = makeLayer(testOccurence.input);
+  _.forEach(tests, (testOccurrence) => {
+    const layer = makeLayer(testOccurrence.input);
 
     const domains = computeColoursDomains(layer);
 
-    t.deepEqual(domains, testOccurence.expected);
+    t.deepEqual(domains, testOccurrence.expected);
   });
 });

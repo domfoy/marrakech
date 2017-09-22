@@ -32,7 +32,13 @@ const Colours = {
   brown: 'BROWN'
 };
 
-const BOARD_LENGTH = 7;
+const BOARD_SIZE = 49;
+const MIN_PLAYERS = 2;
+const MAX_PLAYERS = 4;
+const MAX_PLAYER_COLOURS = 2;
+const TWO_PLAYER_FINAL_TURN = 24;
+const FOUR_PLAYER_FINAL_TURN = 12;
+const BOARD_SIDE_SIZE = 7;
 
 module.exports = {
   ActionTypes,
@@ -40,5 +46,11 @@ module.exports = {
   TurnPhases,
   TurnPhasesOrder,
   Colours,
-  BOARD_LENGTH
+  MIN_PLAYERS,
+  MAX_PLAYERS,
+  MAX_PLAYER_COLOURS,
+  TWO_PLAYER_FINAL_TURN,
+  FOUR_PLAYER_FINAL_TURN,
+  BOARD_SIZE,
+  BOARD_SIDE_SIZE
 };

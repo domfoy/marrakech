@@ -1,5 +1,5 @@
 
-const {drawDice, moveAssam, payTax, formatResponse} = require('./lib');
+const {drawDice, moveAssam, payTax, formatResponse, computeFreeRugSpots} = require('./lib');
 
 module.exports = {
   orientAssamPostProcess,
@@ -17,7 +17,9 @@ async function orientAssamPostProcess(game) {
 
   await game.save();
 
-  return formatResponse(game, tax);
+  const freeRugSpots = computeFreeRugSpots(game);
+
+  return formatResponse(game, tax, freeRugSpots);
 }
 
 async function layRugPostProcess(game) {
