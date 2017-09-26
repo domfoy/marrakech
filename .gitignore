@@ -17,6 +17,11 @@ temp
 tmp
 koa-better-body
 
+# Neon project #
+core/native/target
+core/native/index.node
+core/native/artifacts.json
+
 # Packages #
 # ##########
 *.7z
