@@ -16,7 +16,10 @@ const tests = [
         '1000000'
       ],
       uncoveredRugs: [
-        [0, 7]
+        {
+          spot: [0, 7],
+          colour: 1
+        }
       ],
       assam: {
         position: {
@@ -32,7 +35,9 @@ const tests = [
       [15, 16],
       [15, 22],
       [14, 15],
-      [7, 14]
+      [7, 14],
+      [0, 1],
+      [1, 2]
     ]
   }
 ];
@@ -40,8 +45,33 @@ const tests = [
 test('should compute domains', (t) => {
   _.forEach(tests, (testOccurrence) => {
     const game = {
-      uncoveredRugs: testOccurrence.input.uncoveredRugs,
+      actions: [
+        {
+          meta: {
+            playerId: 2
+          }
+        }
+      ],
+      players: [
+        {
+          colours: [1]
+        },
+        {
+          colours: [2]
+        }
+      ],
+      board: {
+        uncoveredRugs: testOccurrence.input.uncoveredRugs
+      },
       assam: testOccurrence.input.assam
+    };
+
+    game.getCurrentPlayerColours = function getCurrentPlayerColours() {
+      const lastAction = _.last(this.actions);
+
+      const currentPlayer = lastAction.meta.playerId;
+
+      return this.players[currentPlayer - 1].colours;
     };
 
     const freeRugSpots = computeFreeRugSpots(game);

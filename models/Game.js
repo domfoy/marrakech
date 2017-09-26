@@ -29,6 +29,11 @@ const ColourType = {
   max: 4
 };
 
+const SpotType = {
+  type: [CellType],
+  validate: v => v.length === 2 && v[0] < v[1]
+};
+
 module.exports = function registerGame() {
   const gameSchema = new mongoose.Schema({
     playerCount: {type: Number, min: MIN_PLAYERS, max: MAX_PLAYERS},
@@ -59,8 +64,7 @@ module.exports = function registerGame() {
         validate: v => v.length >= MIN_PLAYERS && v.length <= MAX_PLAYERS
       },
       uncoveredRugs: [{
-        cell1: CellType,
-        cell2: CellType,
+        spot: SpotType,
         colour: ColourType
       }]
     },
@@ -110,6 +114,14 @@ module.exports = function registerGame() {
     assert(lastAction, 'No action found in game');
 
     return lastAction.computeNextAction(this);
+  };
+
+  gameSchema.methods.getCurrentPlayerColours = function getCurrentPlayerColours() {
+    const lastAction = _.last(this.actions);
+
+    const currentPlayer = lastAction.meta.playerId;
+
+    return this.players[currentPlayer - 1].colours;
   };
 
   mongoose.model('Game', gameSchema);

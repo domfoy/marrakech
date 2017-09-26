@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const {BOARD_LENGTH, Directions} = require('../../../models/Consts.js');
+const {BOARD_SIDE_SIZE, Directions} = require('../../../models/Consts.js');
 
 const NEUTRAL_COLOR = 0;
 const NO_TAX = 0;
@@ -164,7 +164,7 @@ function computeUnitStep(direction) {
 function payTax(game, newAssam) {
   const assamPosition = newAssam.position;
 
-  const cell = (assamPosition.y * BOARD_LENGTH) + assamPosition.x;
+  const cell = (assamPosition.y * BOARD_SIDE_SIZE) + assamPosition.x;
 
   const colourId = game.board.layer[cell];
 
@@ -172,16 +172,18 @@ function payTax(game, newAssam) {
     return NO_TAX;
   }
 
-  const creditorId = _.findIndex(game.players, p => p.colours.includes(colourId)) + 1;
+  const creditorId = _.findIndex(
+    game.players,
+    p => p.colours.includes(colourId)
+  ) + 1;
 
   const debtorId = _.last(game.actions).meta.playerId;
   if (creditorId === debtorId) {
     return NO_TAX;
   }
-
-  const involvedColourDomains = _.find(game.board.coloursDomains, ds => ds.colourId === colourId);
-  const involvedColourDomain = _.find(involvedColourDomains.domains, d => d.includes(cell));
-  const taxAmount = involvedColourDomain.length;
+  const involvedColoursDomains = _.find(game.board.coloursDomains, ds => ds.colourId === colourId);
+  const involvedColoursDomain = _.find(involvedColoursDomains.domains, d => d.includes(cell));
+  const taxAmount = involvedColoursDomain.length;
 
   return {
     debtorId,

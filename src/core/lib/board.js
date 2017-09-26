@@ -113,7 +113,7 @@ function computeFreeRugSpots(game) {
     return {u: vector, v: vectors[(index + 1) % 4]};
   });
 
-  const deepSpots = bases
+  const unflattenedSpots = bases
     .filter((base) => {
       const centralPosition = {
         x: position.x + base.u.x,
@@ -130,44 +130,47 @@ function computeFreeRugSpots(game) {
 
       const extremities = [
         {
-          x: position.x - base.v.x,
-          y: position.y - base.v.y
+          x: centralPosition.x - base.v.x,
+          y: centralPosition.y - base.v.y
         },
         {
-          x: position.x + (2 * base.u.x),
-          y: position.y + (2 * base.u.y)
+          x: centralPosition.x + base.u.x,
+          y: centralPosition.y + base.u.y
         },
         {
-          x: position.x + base.v.x,
-          y: position.y + base.v.y
+          x: centralPosition.x + base.v.x,
+          y: centralPosition.y + base.v.y
         }
       ];
 
       const centralPositionRugId = coveringRugId(uncoveredRugs, centralPosition);
-
       return extremities
         .filter((extremity) => {
           const extremityRugId = coveringRugId(uncoveredRugs, extremity);
           const isSameRug = extremityRugId === centralPositionRugId;
-          const hasBotheringRug = centralPositionRugId >= 0 && isSameRug;
+          const currentPlayerColours = game.getCurrentPlayerColours();
+          const hasBotheringRug =
+            centralPositionRugId >= 0
+            && isSameRug
+            && !currentPlayerColours.includes(uncoveredRugs[centralPositionRugId].colour);
 
           return !(isPositionOutside(extremity) || hasBotheringRug);
         })
         .map(extremity => convertToSpot(centralPosition, extremity));
     });
 
-  return _.flatten(deepSpots);
+  return _.flatten(unflattenedSpots);
 }
 
 function coveringRugId(uncoveredRugs, position) {
   const cell = convertToCell(position);
   return _.findIndex(uncoveredRugs, (uncoveredRug) => {
-    return (uncoveredRug.cell1 === cell)
-        || (uncoveredRug.cell2 === cell);
+    return (uncoveredRug.spot[0] === cell)
+        || (uncoveredRug.spot[1] === cell);
   });
 }
 
-function isPositionOutside(x, y) {
+function isPositionOutside({x, y}) {
   const tooLeft = x < 0;
   const tooRight = x >= BOARD_SIDE_SIZE;
   const tooLow = y < 0;
@@ -179,10 +182,16 @@ function isPositionOutside(x, y) {
     || tooHigh;
 }
 
-function convertToSpot(position1, position2) {
-  return _.sort(convertToCell(position1), convertToCell(position2));
+function convertToSpot(pos1, pos2) {
+  return _([pos1, pos2])
+    .sortBy(pos => convertToCell(pos))
+    .map(convertToCell)
+    .value();
 }
 
 function convertToCell(position) {
+  if (!position) {
+    return -1;
+  }
   return (position.y * BOARD_SIDE_SIZE) + position.x;
 }
