@@ -56,7 +56,7 @@ module.exports = function registerGame() {
             size: {type: Number, min: 0, max: BOARD_SIZE },
             cells: {
               type: [CellType],
-              validate: v => v.length > 0 && v.length < BOARD_SIZE
+              validate: v => v.length >= 0 && v.length < BOARD_SIZE
             }
           }]
         }],

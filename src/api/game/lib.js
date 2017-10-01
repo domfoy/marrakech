@@ -32,6 +32,9 @@ function init() {
           colourId: 4,
           domains: [[]]
         }
+      ],
+      uncoveredRugs: [
+
       ]
     },
     players: [

@@ -15,18 +15,19 @@ router.use('/game', game.routes(), game.allowedMethods());
 router.use('/game/:gameId/action', action.routes(), action.allowedMethods());
 
 app
-  // .use(async (ctx, next) => {
-  //   try {
-  //     await next;
-  //   } catch (err) {
-  //     console.log(err);
-  //     ctx.throw(500, 'sa mere');
-  //     // ctx.status = 400;
-  //     // ctx.body = err.message;
-  //     // // ctx.app.emit('error', err, ctx);
-  //     // ctx.throw(300, 'changed');
-  //   }
-  // })
+  .use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        ctx.status = 400;
+        ctx.body = err.message;
+      } else {
+        ctx.throw(500, 'sa mere');
+      }
+      ctx.app.emit('error', err, ctx);
+    }
+  })
   .use(body())
   .use(router.routes())
   .use(router.allowedMethods());
