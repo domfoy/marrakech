@@ -7,7 +7,6 @@ const directionAsArray = _.values(Directions);
 
 const {orientAssamPostProcess} = require('../src/core/game-logic.js');
 
-
 const orientAssamAction = {
   type: {
     type: String,

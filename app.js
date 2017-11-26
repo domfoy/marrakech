@@ -4,19 +4,19 @@ const http = require('http');
 
 const io = require('socket.io');
 const Koa = require('koa');
-const body = require('koa-body');
+// const body = require('koa-body');
 const Router = require('koa-router');
 
-const {game, action} = require('./src/api');
+// const {game, action} = require('./src/api');
 const socketHandler = require('./src/socket');
 
-const app = new Koa();
+// const app = new Koa();
 
 const router = new Router();
 
 router.get('/ping', (ctx) => {ctx.body = 'OK';});
-router.use('/game', game.routes(), game.allowedMethods());
-router.use('/game/:gameId/action', action.routes(), action.allowedMethods());
+// router.use('/game', game.routes(), game.allowedMethods());
+// router.use('/game/:gameId/action', action.routes(), action.allowedMethods());
 
 // app
 //   .use(async (ctx, next) => {

@@ -13,4 +13,6 @@ async function initGame(ctx) {
 
 router.post('/', initGame);
 
-module.exports = router;
+module.exports = {
+  router
+};

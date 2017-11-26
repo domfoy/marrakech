@@ -63,6 +63,10 @@ function init() {
   return game.save();
 }
 
+function get(gameId) {
+  return Game.findById(gameId);
+}
+
 function terminate(gameId) {
   if (!gameId) {
     return Promise.resolve();
@@ -79,6 +83,7 @@ function terminateMany(gameIds) {
 
 module.exports = {
   init,
+  get,
   terminate,
   terminateMany
 };

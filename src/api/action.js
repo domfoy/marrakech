@@ -1,14 +1,18 @@
 const _ = require('lodash');
 
-const router = require('koa-router')();
+// const router = require('koa-router')();
 
 const Game = require('mongoose').model('Game');
 
-router.get('/current', fetchGame, displayCurrentAction);
-router.put('/:id', fetchGame, checkAction, setAction);
-router.post('/:id/next', fetchGame, checkAction, addNextAction);
+// router.get('/current', fetchGame, displayCurrentAction);
+// router.put('/:id', fetchGame, checkAction, setAction);
+// router.post('/:id/next', fetchGame, checkAction, addNextActionContext);
 
-module.exports = router;
+module.exports = {
+  fetchGame,
+  setAction,
+  addNextActionContext
+};
 
 async function fetchGame(ctx, next) {
   ctx.assert(ctx.params.gameId);
@@ -50,8 +54,11 @@ async function trySave(ctx) {
   }
 }
 
-async function addNextAction(ctx) {
-  const payload = await ctx.state.game.computeNextAction();
-
-  ctx.response.body = payload;
+// async function addNextActionContext(ctx) {
+//   const payload = await ctx.state.game.computeNextAction();
+//
+//   ctx.response.body = payload;
+// }
+function addNextActionContext(ctx) {
+  return ctx.state.game.computeNextAction();
 }

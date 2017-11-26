@@ -3,7 +3,6 @@ const config = require('config');
 const db = require('../db.js');
 const app = require('../app.js');
 
-
 db.connect()
   .then(() => {
     app.listen(config.port);
