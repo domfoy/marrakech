@@ -36,14 +36,14 @@ function displayCurrentAction(ctx) {
   ctx.response.body = ctx.state.game.getCurrentAction().toObject();
 }
 
-async function setAction(ctx) {
-  const currentAction = _.last(ctx.state.game.actions);
+async function setAction(game, action) {
+  const currentAction = _.last(game.actions);
 
-  currentAction.set('payload', ctx.request.body);
+  currentAction.set('payload', action);
 
   await trySave(ctx);
 
-  ctx.response.body = ctx.state.game.getCurrentAction().toObject();
+  ctx.response.body = game.getCurrentAction().toObject();
 }
 
 async function trySave(ctx) {

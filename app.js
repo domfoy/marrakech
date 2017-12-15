@@ -10,7 +10,7 @@ const Router = require('koa-router');
 // const {game, action} = require('./src/api');
 const socketHandler = require('./src/socket');
 
-// const app = new Koa();
+const app = new Koa();
 
 const router = new Router();
 
