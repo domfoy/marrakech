@@ -1,0 +1,17 @@
+[package]
+name = "core"
+version = "0.1.0"
+authors = ["lafaillette <quentin.pergeline@gmail.com>"]
+license = "MIT"
+build = "build.rs"
+
+[lib]
+name = "core"
+crate-type = ["dylib"]
+
+[build-dependencies]
+neon-build = "0.1.22"
+
+[dependencies]
+neon = "0.1.22"
+logic = {path="../../logic"}

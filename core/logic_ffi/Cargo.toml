@@ -1,0 +1,11 @@
+[package]
+name = "logic_ffi"
+version = "0.1.0"
+authors = ["lafaillette <quentin.pergeline@gmail.com>"]
+
+[lib]
+name = "logic_ffi"
+crate-type = ["dylib"]
+
+[dependencies]
+logic = {path="../logic"}

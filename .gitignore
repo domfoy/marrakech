@@ -13,14 +13,15 @@ lib-cov
 coverage
 nbproject
 cache
+target
 temp
 tmp
 koa-better-body
 
 # Neon project #
-core/native/target
-core/native/index.node
-core/native/artifacts.json
+core/neon/native/target
+core/neon/native/index.node
+core/neon/native/artifacts.json
 
 # Packages #
 # ##########
