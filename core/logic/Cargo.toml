@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["lafaillette <quentin.pergeline@gmail.com>"]
 
 [dependencies]
+num = "0.1"
+num-traits = "0.2"
+num-derive = "0.2"
+rand = "0.4.2"

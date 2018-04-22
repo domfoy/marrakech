@@ -1,8 +1,16 @@
-pub mod game {
-  pub fn hello () -> String {
-    return String::from("Hello world");
-  }
+extern crate num;
+#[macro_use]
+extern crate num_derive;
+
+mod action;
+mod consts;
+mod game;
+mod player;
+
+pub fn hello () -> String {
+  return String::from("Hello world");
 }
+
 
 #[cfg(test)]
 mod tests {
