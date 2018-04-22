@@ -4,7 +4,7 @@ extern crate num_derive;
 
 mod action;
 mod consts;
-mod game;
+pub mod game;
 mod player;
 
 pub fn hello () -> String {

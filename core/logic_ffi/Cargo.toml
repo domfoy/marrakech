@@ -8,4 +8,5 @@ name = "logic_ffi"
 crate-type = ["dylib"]
 
 [dependencies]
+libc = "0.2.40"
 logic = {path="../logic"}

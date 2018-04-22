@@ -4,6 +4,10 @@ use consts;
 use player::Player;
 use action::Action;
 
+#[derive(Debug)]
+pub struct Game1 {
+  pub remaining_rugs: u32
+}
 pub struct Game {
   remaining_rugs: u32,
   assam: Assam,
@@ -24,6 +28,14 @@ impl Assam {
   }
 }
 
+impl Game1 {
+  pub fn new() -> Self {
+    Game1{remaining_rugs: 16}
+  }
+  pub fn show_game(self: &Self) {
+    format!("hello {}", self.remaining_rugs);
+  }
+}
 
 impl Game {
   // pub fn is_over(self: &Self) -> Boolean
