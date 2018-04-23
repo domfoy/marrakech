@@ -1,6 +1,6 @@
-use consts;
+use consts::Direction;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 pub enum Action {
-  OrientAssam(consts::Direction)
+  OrientAssam(Direction)
 }

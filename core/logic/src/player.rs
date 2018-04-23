@@ -18,13 +18,13 @@ impl Player {
       agent
     }
   }
-  fn get_action<'a>(self: &Self, actions: &[&'a Action], game: &Game) -> &'a Action {
+  pub fn get_action(self: &Self, actions: &[Action], game: &Game) -> Action {
     self.agent.get_action(actions, game)
   }
 }
 
 pub trait Agent {
-  fn get_action<'a>(self: &Self, actions: &[&'a Action], game: &Game) -> &'a Action;
+  fn get_action(self: &Self, actions: &[Action], game: &Game) -> Action;
 }
 
 pub struct RandomAgent {
@@ -42,9 +42,9 @@ impl RandomAgent {
 }
 
 impl Agent for RandomAgent {
-  fn get_action<'a>(self: &Self, actions: &[&'a Action], game: &Game) -> &'a Action {
+  fn get_action(self: &Self, actions: &[Action], game: &Game) -> Action {
     // let r = self.rng.gen_range();
-    actions[0]
+    actions[0].clone()
   }
 }
 

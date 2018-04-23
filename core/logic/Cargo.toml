@@ -3,6 +3,14 @@ name = "logic"
 version = "0.1.0"
 authors = ["lafaillette <quentin.pergeline@gmail.com>"]
 
+[lib]
+name = "logic"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mybin"
+path = "src/bin.rs"
+
 [dependencies]
 num = "0.1"
 num-traits = "0.2"

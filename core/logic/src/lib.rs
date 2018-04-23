@@ -5,7 +5,7 @@ extern crate num_derive;
 mod action;
 mod consts;
 pub mod game;
-mod player;
+pub mod player;
 
 pub fn hello () -> String {
   return String::from("Hello world");
