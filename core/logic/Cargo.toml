@@ -12,6 +12,8 @@ name = "mybin"
 path = "src/bin.rs"
 
 [dependencies]
+log = "0.4.3"
+env_logger = "0.5.11"
 num = "0.1"
 num-traits = "0.2"
 num-derive = "0.2"

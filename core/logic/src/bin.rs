@@ -1,14 +1,23 @@
+#[macro_use] extern crate log;
+extern crate env_logger;
 extern crate logic;
 
-use logic::player::{Player, RandomAgent};
 use logic::game::Game;
+use logic::player;
 
 fn main() {
-  let agent = RandomAgent::new();
+  env_logger::init();
+  info!("logger initialized");
 
-  let player = Player::new(0, Box::new(agent));
+  let agent1 = Box::new(player::RandomAgent::new());
+  let agent2 = Box::new(player::RandomAgent::new());
 
-  let mut game = Game::new();
+  let players = [
+    &player::Player::new(0, agent1),
+    &player::Player::new(0, agent2)
+  ];
 
-  game.play(&mut [&player]);
+  let mut game = Game::new(&players);
+
+  game.play();
 }
