@@ -3,9 +3,10 @@ use player::Agent;
 
 mod internals;
 mod assam;
-mod rug;
+mod board;
 
 use self::assam::Assam;
+use self::board::Board;
 
 use player::Player;
 
@@ -13,6 +14,7 @@ use player::Player;
 pub struct Game<'a> {
   action_type: ActionType,
   assam: Assam,
+  board: Board,
   players: &'a[&'a Player],
   players_count: u32,
   remaining_rugs: u32
@@ -27,6 +29,7 @@ impl<'a> Game<'a> {
       assam: Assam::new(),
       players_count: players.len() as u32,
       players,
+      board: Board::new(),
       remaining_rugs: 16,
     }
   }
@@ -47,6 +50,7 @@ impl<'a> Game<'a> {
     let mut i = 0;
     self.show_game();
     while !self.is_over() {
+      debug!("{}", self.board);
       let player = self.players[i];
       self.next_step(player);
       i += 1;
