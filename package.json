@@ -1,12 +1,12 @@
 {
   "name": "marrakech",
-  "version": "0.0.1",
-  "description": "online version of the boardgame",
+  "version": "0.1.0",
+  "description": "Back-end for the online version of the boardgame",
   "main": "bin/server.js",
   "scripts": {
     "start": "node bin/server.js",
-    "test": "./node_modules/.bin/ava",
-    "lint": "./node_modules/.bin/eslint  ."
+    "test": "ava",
+    "lint": "eslint  ."
   },
   "keywords": [
     "marrakech"
