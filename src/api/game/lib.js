@@ -1,35 +1,46 @@
 const _ = require('lodash');
 
-const {Directions} = require('../../../models');
+const {Directions, ActionTypes, Colours} = require('../../../models');
 const Game = require('mongoose').model('Game');
 const Position = require('mongoose').model('Position');
 
 function init() {
+  const layer = [];
+  let size = 49;
+
+  while (size--) layer[size] = Colours.NONE;
   const game = new Game({
     playerCount: 2,
+    remainingPlayerIds: [1, 2],
     totalTurns: 24,
-    currentTurn: 1,
+    remainingColours: [Colours.BLUE, Colours.RED, Colours.YELLOW, Colours.BROWN],
+    pendingAction: {
+      turnId: 1,
+      playerId: 1,
+      colour: Colours.BLUE,
+      type: ActionTypes.ORIENT_ASSAM
+    },
     assam: {
       direction: Directions.up,
-      position: new Position({x: 3, y: 3})
+      position: new Position({x: 0, y: 0})
     },
     board: {
-      layer: Array.from('0'.repeat(49)).map(parseFloat),
+      layer,
       coloursDomains: [
         {
-          colourId: 1,
+          colour: Colours.BLUE,
           domains: [[]]
         },
         {
-          colourId: 2,
+          colour: Colours.YELLOW,
           domains: [[]]
         },
         {
-          colourId: 3,
+          colour: Colours.RED,
           domains: [[]]
         },
         {
-          colourId: 4,
+          colour: Colours.BROWN,
           domains: [[]]
         }
       ],
@@ -39,25 +50,17 @@ function init() {
     },
     players: [
       {
+        id: 1,
         money: 30,
-        colours: [1, 2]
+        colours: [Colours.BLUE, Colours.RED]
       },
       {
+        id: 2,
         money: 30,
-        colours: [3, 4]
+        colours: [Colours.YELLOW, Colours.BROWN]
       }
     ],
-    actions: [{
-      kind: 'OrientAssamAction',
-      meta: {
-        turnId: 1,
-        playerId: 1
-      },
-      type: 'ORIENT_ASSAM',
-      payload: {
-        direction: 'UP'
-      }
-    }]
+    actions: []
   });
 
   return game.save();

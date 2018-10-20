@@ -1,5 +1,7 @@
+const _ = require('lodash');
 
-const {drawDice, moveAssam, payTax, formatResponse, computeFreeRugSpots} = require('./lib');
+const {ActionTypes} = require('../../models');
+const {drawDice, moveAssam, payTax} = require('./lib');
 
 module.exports = {
   orientAssamPostProcess,
@@ -7,21 +9,88 @@ module.exports = {
 };
 
 async function orientAssamPostProcess(game) {
+  const savedGame = game.toObject();
+
   const draw = drawDice();
+  moveAssam(game, draw);
+  payTax(game);
 
-  const newAssam = moveAssam(game.assam, draw);
+  if (isOver(game)) {
+    return;
+  }
 
-  game.assam = newAssam;
+  let turnId;
+  let playerId;
+  let actionType;
+  let colour;
 
-  const tax = payTax(game, newAssam);
+  const hasCurrentPlayerLost = !_.includes(game.remainingPlayerIds, savedGame.pendingAction.playerId);
 
-  await game.save();
+  if (!hasCurrentPlayerLost) {
+    turnId = savedGame.pendingAction.turnId;
+    playerId = savedGame.pendingAction.playerId;
+    actionType = ActionTypes.LAY_RUG;
+    colour = savedGame.pendingAction.colour;
+  } else if (isTurnOver(savedGame)) {
+    turnId = savedGame.pendingAction.turnId + 1;
+    playerId = game.remainingPlayerIds[0];
+    actionType = ActionTypes.ORIENT_ASSAM;
+    colour = game.remainingColours[0];
+  } else {
+    turnId = savedGame.pendingAction.turnId;
+    playerId = getNextPlayerId(savedGame);
+    actionType = ActionTypes.ORIENT_ASSAM;
+    colour = getNextColour(savedGame);
+  }
 
-  const freeRugSpots = computeFreeRugSpots(game);
+  game.pendingAction = {
+    turnId,
+    playerId,
+    colour,
+    type: actionType
+  };
+}
 
-  return formatResponse(game, tax, freeRugSpots);
+function isOver(game) {
+  return game.remainingPlayerIds.length === 1 || (game.actions.length === game.totalTurns && !!_.last(game.actions).payload);
+}
+
+function isTurnOver(game) {
+  return _.last(game.remainingPlayerIds) === game.pendingAction.playerId;
+}
+
+function getNextPlayerId(game) {
+  return game.remainingPlayerIds[game.remainingPlayerIds.indexOf(game.pendingAction.playerId) + 1];
+}
+
+function getNextColour(game) {
+  return game.remainingColours[game.remainingColours.indexOf(game.pendingAction.colour) + 1];
 }
 
 async function layRugPostProcess(game) {
-  return game;
+  if (isOver(game)) {
+    return;
+  }
+  const savedGame = game.toObject();
+
+  let turnId;
+  let playerId;
+  let colour;
+
+  if (isTurnOver(savedGame)) {
+    turnId = savedGame.pendingAction.turnId + 1;
+    playerId = savedGame.remainingPlayerIds[0];
+    colour = savedGame.remainingColours[0];
+  } else {
+    turnId = savedGame.pendingAction.turnId;
+    playerId = getNextPlayerId(savedGame);
+    colour = getNextColour(savedGame);
+  }
+
+  game.pendingAction = {
+    turnId,
+    playerId,
+    colour,
+    type: ActionTypes.ORIENT_ASSAM
+  };
 }

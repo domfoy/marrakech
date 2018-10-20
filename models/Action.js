@@ -1,13 +1,14 @@
 const mongoose = require('mongoose'),
       _ = require('lodash');
 
-const {ActionTypes} = require('./Consts.js');
+const {ActionTypes, ColourType} = require('./Consts.js');
 
 module.exports = function registerAction() {
   const actionSchema = new mongoose.Schema({
     meta: {
       turnId: {type: Number},
-      playerId: {type: Number, min: 1, max: 4}
+      playerId: {type: Number, min: 1, max: 4},
+      colour: ColourType
     },
     type: {
       type: String,

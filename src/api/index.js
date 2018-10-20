@@ -1,7 +1,5 @@
-const game = require('./game'),
-      action = require('./action.js');
+const game = require('./game');
 
 module.exports = {
-  game,
-  action
+  game
 };

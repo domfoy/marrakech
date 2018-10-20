@@ -1,47 +1,62 @@
 const test = require('ava'),
-      request = require('supertest');
+      config = require('config'),
+      io = require('socket.io-client');
 
 const db = require('../db.js'),
-      server = require('../app.js').listen();
+      server = require('../app.js');
 
-const {terminateMany} = require('../src/api/game/lib.js');
+test.before(async () => {
+  await db.connect();
 
-test.before(() => {
-  return db.connect();
+  return server.listen(config.port);
 });
 
 test.after.always(() => {
   return db.disconnect();
 });
 
-test.beforeEach(async (t) => {
-  const gameId = await request(server)
-    .post('/game')
-    .expect(201)
-    .then(response => response.body._id);
+test.beforeEach((t) => {
+  const client = io.connect('http://localhost:8082');
 
-  t.context.gameIds = [gameId];
+  return new Promise((resolve) => {
+    client.on('event:game_created', (game) => {
+      t.context.game = game;
+      t.context.client = client;
+
+      resolve();
+    });
+  });
 });
 
-test.afterEach.always((t) => {
-  return terminateMany(t.context.gameIds);
+test.afterEach((t) => {
+  if (t.context.client.connected) {
+    t.context.client.disconnect();
+  }
 });
-
 
 test('should handle complete user turn', async (t) => {
-  t.plan(1);
+  t.context.client.emit('event:action_submitted', {
+    direction: 'LEFT'
+  });
 
-  const currentActionId = await request(server)
-    .get(`/game/${gameId}/action/current`)
-    .expect(200)
-    .then(response => response.body._id);
+  return new Promise((resolve) => {
+    let turn = 1;
+    t.context.client.on('event:new_pending_action_set', (action) => {
+      console.log('new pending action', turn, action);
+      t.truthy(action);
 
-  return request(server)
-    .post(`/game/${gameId}/action/${currentActionId}/next`)
-    .expect(200)
-    .then((response) => {
-      const body = response.body;
+      if (turn < 2) {
+        t.context.client.emit('event:action_submitted', {
+          positions: [
+            {x: 1, y: 2},
+            {x: 1, y: 3}
+          ]
+        });
 
-      t.truthy(body);
+        turn++;
+      } else {
+        resolve();
+      }
     });
+  });
 });

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const coordinateType = {
   type: Number,
   required: true,
-  set: v => Math.round(v) % 7
+  validate: v => v >= -3 && v <= 3
 };
 
 module.exports = function registerPosition() {

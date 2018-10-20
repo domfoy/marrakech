@@ -1,6 +1,8 @@
+const _ = require('lodash');
+
 const ActionTypes = {
-  orientAssam: 'ORIENT_ASSAM',
-  layRug: 'LAY_RUG'
+  ORIENT_ASSAM: 'ORIENT_ASSAM',
+  LAY_RUG: 'LAY_RUG'
 };
 
 const Directions = {
@@ -17,19 +19,19 @@ const TurnPhases = Object.assign({
 }, ActionTypes);
 
 const TurnPhasesOrder = [
-  'orientAssam',
+  'ORIENT_ASSAM',
   'drawDice',
   'moveAssam',
   'payTax',
-  'layRug'
+  'LAY_RUG'
 ];
 
 const Colours = {
-  none: '',
-  blue: 'BLUE',
-  yellow: 'YELLOW',
-  red: 'RED',
-  brown: 'BROWN'
+  NONE: '',
+  BLUE: 'BLUE',
+  YELLOW: 'YELLOW',
+  RED: 'RED',
+  BROWN: 'BROWN'
 };
 
 const BOARD_SIZE = 49;
@@ -40,12 +42,18 @@ const TWO_PLAYER_FINAL_TURN = 24;
 const FOUR_PLAYER_FINAL_TURN = 12;
 const BOARD_SIDE_SIZE = 7;
 
+const ColourType = {
+  type: String,
+  enum: _.values(Colours)
+};
+
 module.exports = {
   ActionTypes,
   Directions,
   TurnPhases,
   TurnPhasesOrder,
   Colours,
+  ColourType,
   MIN_PLAYERS,
   MAX_PLAYERS,
   MAX_PLAYER_COLOURS,

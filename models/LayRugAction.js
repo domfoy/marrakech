@@ -7,8 +7,8 @@ const {layRugPostProcess} = require('../src/core/game-logic.js');
 const LayRugActionSchemaObject = {
   type: {
     type: String,
-    default: ActionTypes.layRug,
-    enums: [ActionTypes.layRug]
+    default: ActionTypes.LAY_RUG,
+    enums: [ActionTypes.LAY_RUG]
   },
   payload: {
     positions: {
@@ -26,8 +26,8 @@ module.exports = function registerLayRugAction() {
     _id: false
   });
 
-  layRugActionSchema.methods.computeNextAction = function computeNextAction() {
-    return layRugPostProcess(this);
+  layRugActionSchema.methods.computeNextAction = function computeNextAction(game) {
+    layRugPostProcess(game);
   };
 
   mongoose.model('__LayRugAction', layRugActionSchema);

@@ -1,12 +1,12 @@
 const _ = require('lodash');
 
-const {BOARD_SIDE_SIZE, Directions} = require('../../../models/Consts.js');
+const {BOARD_SIDE_SIZE, Directions, Colours} = require('../../../models/Consts.js');
 
-const NEUTRAL_COLOR = 0;
+const NEUTRAL_COLOR = Colours.NONE;
 const NO_TAX = 0;
 const LIMITS = {
-  LOWER: 0,
-  UPPER: 6
+  LOWER: -3,
+  UPPER: 3
 };
 
 module.exports = {
@@ -15,9 +15,11 @@ module.exports = {
   formatResponse
 };
 
-function moveAssam(assam, draw) {
+function moveAssam(game, draw) {
+  const assam = game.assam;
   const {x, y, direction} = _moveAssam(assam, draw);
 
+  game.assam = {position: {x, y}, direction};
   return {
     direction,
     position: {
@@ -45,7 +47,7 @@ function _moveAssam(assam, draw) {
   }
   if (directMove.x < LIMITS.LOWER && directMove.y % 2 === 0) {
     return {
-      x: -directMove.x - 1,
+      x: (2 * LIMITS.LOWER) + (draw - 1),
       y: directMove.y + 1,
       direction: Directions.right
     };
@@ -126,7 +128,6 @@ function _moveAssam(assam, draw) {
       direction: Directions.up
     };
   }
-
   return {
     x: directMove.x,
     y: directMove.y,
@@ -161,29 +162,44 @@ function computeUnitStep(direction) {
   }
 }
 
-function payTax(game, newAssam) {
-  const assamPosition = newAssam.position;
+function payTax(game) {
+  const assamPosition = game.assam.position;
 
-  const cell = (assamPosition.y * BOARD_SIDE_SIZE) + assamPosition.x;
+  const cell = positionToCell(assamPosition);
 
-  const colourId = game.board.layer[cell];
+  const colour = game.board.layer[cell];
 
-  if (colourId === NEUTRAL_COLOR) {
+  if (colour === NEUTRAL_COLOR) {
     return NO_TAX;
   }
 
-  const creditorId = _.findIndex(
+  const creditorId = _.find(
     game.players,
-    p => p.colours.includes(colourId)
-  ) + 1;
+    p => p.colours.includes(colour)
+  ).id;
 
   const debtorId = _.last(game.actions).meta.playerId;
   if (creditorId === debtorId) {
     return NO_TAX;
   }
-  const involvedColoursDomains = _.find(game.board.coloursDomains, ds => ds.colourId === colourId);
+  const involvedColoursDomains = _.find(game.board.coloursDomains, ds => ds.colour === colour);
   const involvedColoursDomain = _.find(involvedColoursDomains.domains, d => d.includes(cell));
-  const taxAmount = involvedColoursDomain.length;
+  let taxAmount = involvedColoursDomain.length;
+
+  const debtor = _.find(game.players, {id: debtorId});
+  const creditor = _.find(game.players, {id: creditorId});
+
+  if (debtor.money <= taxAmount) {
+    taxAmount = debtor.money;
+
+    debtor.money = 0;
+    creditor.money += taxAmount;
+    _.remove(game.remainingPlayerIds, debtorId);
+    _.remove(game.remainingColours, c => _.includes(debtor.colours, c));
+  } else {
+    debtor.money -= taxAmount;
+    creditor.money += taxAmount;
+  }
 
   return {
     debtorId,
@@ -206,4 +222,8 @@ function formatResponse(assam, tax) {
     assam,
     tax
   };
+}
+
+function positionToCell({x, y}) {
+  return (BOARD_SIDE_SIZE * (y + 3)) + (x + 3);
 }

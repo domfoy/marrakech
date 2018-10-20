@@ -5,13 +5,11 @@ const {Directions, ActionTypes} = require('./Consts.js');
 
 const directionAsArray = _.values(Directions);
 
-const {orientAssamPostProcess} = require('../src/core/game-logic.js');
-
 const orientAssamAction = {
   type: {
     type: String,
-    default: ActionTypes.orientAssam,
-    enums: [ActionTypes.orientAssam]
+    default: ActionTypes.ORIENT_ASSAM,
+    enums: [ActionTypes.ORIENT_ASSAM]
   },
   payload: {
     direction: {
@@ -43,10 +41,6 @@ module.exports = function registerOrientAssamAction() {
     }
 
     return actionDirection !== assamOppositeDirection;
-  };
-
-  orientAssamActionSchema.methods.computeNextAction = function computeNextAction(game) {
-    return orientAssamPostProcess(game);
   };
 
   mongoose.model('__OrientAssamAction', orientAssamActionSchema);
