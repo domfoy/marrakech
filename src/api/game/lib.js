@@ -8,7 +8,7 @@ function init() {
   const layer = [];
   let size = 49;
 
-  while (size--) layer[size] = Colours.NONE;
+  while (size--) layer[size] = 0;
   const game = new Game({
     playerCount: 2,
     remainingPlayerIds: [1, 2],

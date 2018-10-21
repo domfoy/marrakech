@@ -6,7 +6,13 @@ const actionSchema = require('mongoose').model('Action').schema;
 const orientAssamActionSchema = require('mongoose').model('__OrientAssamAction').schema;
 const layRugActionSchema = require('mongoose').model('__LayRugAction').schema;
 
-const {Directions, ActionTypes, ColourType, Colours} = require('./Consts.js');
+const {
+  ActionTypes,
+  Colours,
+  ColoursAsArray,
+  ColourType,
+  Directions
+} = require('./Consts.js');
 const {
   layRugPostProcess,
   orientAssamPostProcess
@@ -23,9 +29,8 @@ const FOUR_PLAYER_FINAL_TURN = 12;
 const actionTypesAsArray = _.values(ActionTypes);
 const directionAsArray = _.values(Directions);
 
-const CellType = {
-  type: {type: Number, min: 0, max: BOARD_SIZE - 1}
-};
+const ColourId = {type: Number, min: 0, max: 4};
+const CellType = {type: Number, min: 0, max: BOARD_SIZE - 1};
 
 const SpotType = {
   type: [CellType],
@@ -55,27 +60,26 @@ module.exports = function registerGame() {
     },
     board: {
       layer: {
-        type: [ColourType],
+        type: [ColourId],
         default: defaultLayer,
         validate: v => v.length === BOARD_SIZE
       },
       coloursDomains: {
         type: [{
-          colourId: ColourType,
+          colourId: ColourId,
           domains: [{
             size: {type: Number, min: 0, max: BOARD_SIZE },
             cells: {
-              type: [CellType],
-              validate: v => v.length >= 0 && v.length < BOARD_SIZE
+              type: [CellType]
             }
           }]
         }],
         required: true,
-        validate: v => v.length >= MIN_PLAYERS && v.length <= MAX_PLAYERS
+        validate: v => v.length <= MAX_PLAYERS
       },
       uncoveredRugs: [{
         spot: SpotType,
-        colour: ColourType
+        colour: ColourId
       }]
     },
     players: {
@@ -114,6 +118,11 @@ module.exports = function registerGame() {
   gameSchema.path('actions').discriminator('OrientAssamAction', orientAssamActionSchema);
   gameSchema.path('actions').discriminator('LayRugAction', layRugActionSchema);
 
+  gameSchema.methods.getCellColour = function getCellColour(cellIndex) {
+    const cell = this.board.layer[cellIndex];
+    return ColoursAsArray[cell];
+  };
+
   gameSchema.methods.getCurrentAction = function getCurrentAction() {
     return _.last(this.actions);
   };
@@ -131,8 +140,10 @@ module.exports = function registerGame() {
       orientAssamPostProcess(this);
       break;
     case ActionTypes.LAY_RUG:
-      this.board.layer[action.positions[0].x + 3 + ((action.positions[0].y + 3) * 7)] = action.colour;
-      this.board.layer[action.positions[1].x + 3 + ((action.positions[1].y + 3) * 7)] = action.colour;
+      const colourId = _.findIndex(ColoursAsArray, action.colour);
+
+      this.board.layer[action.positions[0].x + 3 + ((action.positions[0].y + 3) * 7)] = colourId;
+      this.board.layer[action.positions[1].x + 3 + ((action.positions[1].y + 3) * 7)] = colourId;
       this.actions.push({
         kind: 'LayRugAction',
         meta: this.pendingAction,
@@ -153,9 +164,7 @@ module.exports = function registerGame() {
   };
 
   gameSchema.methods.getCurrentPlayerColours = function getCurrentPlayerColours() {
-    const lastAction = _.last(this.actions);
-
-    const currentPlayer = lastAction.meta.playerId;
+    const currentPlayer = this.pendingAction.playerId;
 
     return this.players[currentPlayer - 1].colours;
   };

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "test": "ava",
-    "lint": "eslint  ."
+    "lint": "eslint ."
   },
   "keywords": [
     "marrakech"

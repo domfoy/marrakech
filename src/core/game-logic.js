@@ -1,7 +1,12 @@
 const _ = require('lodash');
 
 const {ActionTypes} = require('../../models');
-const {drawDice, moveAssam, payTax} = require('./lib');
+const {
+  computeColoursDomains,
+  drawDice,
+  moveAssam,
+  payTax
+} = require('./lib');
 
 module.exports = {
   orientAssamPostProcess,
@@ -68,6 +73,10 @@ function getNextColour(game) {
 }
 
 async function layRugPostProcess(game) {
+  const coloursDomains = computeColoursDomains(game.board.layer);
+
+  game.board.coloursDomains = coloursDomains;
+
   if (isOver(game)) {
     return;
   }

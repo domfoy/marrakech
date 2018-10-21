@@ -42,9 +42,10 @@ const TWO_PLAYER_FINAL_TURN = 24;
 const FOUR_PLAYER_FINAL_TURN = 12;
 const BOARD_SIDE_SIZE = 7;
 
+const ColoursAsArray = _.values(Colours);
 const ColourType = {
   type: String,
-  enum: _.values(Colours)
+  enum: ColoursAsArray
 };
 
 module.exports = {
@@ -53,6 +54,7 @@ module.exports = {
   TurnPhases,
   TurnPhasesOrder,
   Colours,
+  ColoursAsArray,
   ColourType,
   MIN_PLAYERS,
   MAX_PLAYERS,

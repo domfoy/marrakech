@@ -167,8 +167,7 @@ function payTax(game) {
 
   const cell = positionToCell(assamPosition);
 
-  const colour = game.board.layer[cell];
-
+  const colour = game.getCellColour(cell);
   if (colour === NEUTRAL_COLOR) {
     return NO_TAX;
   }
