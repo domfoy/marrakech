@@ -38,93 +38,93 @@ function _moveAssam(assam, draw) {
   };
 
   // too to the left
-  if (directMove.x < LIMITS.LOWER && directMove.y === LIMITS.UPPER) {
+  if (directMove.x < LIMITS.LOWER && directMove.y === LIMITS.LOWER) {
     return {
       x: LIMITS.LOWER,
-      y: LIMITS.UPPER + directMove.x + 1,
-      direction: Directions.down
+      y: (2 * LIMITS.LOWER) - directMove.x - 1,
+      direction: Directions.up
     };
   }
   if (directMove.x < LIMITS.LOWER && directMove.y % 2 === 0) {
     return {
-      x: (2 * LIMITS.LOWER) + (draw - 1),
+      x: (2 * LIMITS.LOWER) - directMove.x - 1,
       y: directMove.y + 1,
       direction: Directions.right
     };
   }
   if (directMove.x < LIMITS.LOWER && directMove.y % 2 !== 0) {
     return {
-      x: -directMove.x - 1,
+      x: (2 * LIMITS.LOWER) - directMove.x - 1,
       y: directMove.y - 1,
       direction: Directions.right
     };
   }
 
   // too to the right
-  if (directMove.x > LIMITS.UPPER && directMove.y === LIMITS.LOWER) {
+  if (directMove.x > LIMITS.UPPER && directMove.y === LIMITS.UPPER) {
     return {
       x: LIMITS.UPPER,
-      y: directMove.x - LIMITS.UPPER - 1,
-      direction: Directions.up
+      y: (2 * LIMITS.UPPER) - (directMove.x - 1),
+      direction: Directions.down
     };
   }
   if (directMove.x > LIMITS.UPPER && directMove.y % 2 === 0) {
     return {
-      x: ((2 * LIMITS.UPPER) + 1) - directMove.x,
+      x: (2 * LIMITS.UPPER) - (directMove.x - 1),
       y: directMove.y - 1,
       direction: Directions.left
     };
   }
   if (directMove.x > LIMITS.UPPER && directMove.y % 2 !== 0) {
     return {
-      x: ((2 * LIMITS.UPPER) + 1) - directMove.x,
+      x: (2 * LIMITS.UPPER) - (directMove.x - 1),
       y: directMove.y + 1,
       direction: Directions.left
     };
   }
 
   // too up
-  if (directMove.y > LIMITS.UPPER && directMove.x === LIMITS.LOWER) {
+  if (directMove.y > LIMITS.UPPER && directMove.x === LIMITS.UPPER) {
     return {
-      x: directMove.y - LIMITS.UPPER - 1,
+      x: (2 * LIMITS.UPPER) - (directMove.y - 1),
       y: LIMITS.UPPER,
-      direction: Directions.right
+      direction: Directions.left
     };
   }
   if (directMove.y > LIMITS.UPPER && directMove.x % 2 === 0) {
     return {
       x: directMove.x - 1,
-      y: ((2 * LIMITS.UPPER) + 1) - directMove.y,
+      y: (2 * LIMITS.UPPER) - (directMove.y - 1),
       direction: Directions.down
     };
   }
   if (directMove.y > LIMITS.UPPER && directMove.x % 2 !== 0) {
     return {
       x: directMove.x + 1,
-      y: ((2 * LIMITS.UPPER) + 1) - directMove.y,
+      y: (2 * LIMITS.UPPER) - (directMove.y - 1),
       direction: Directions.down
     };
   }
 
   // too down
-  if (directMove.y < LIMITS.LOWER && directMove.x === LIMITS.UPPER) {
+  if (directMove.y < LIMITS.LOWER && directMove.x === LIMITS.LOWER) {
     return {
-      x: LIMITS.UPPER + directMove.y + 1,
+      x: (2 * LIMITS.LOWER) - directMove.y - 1,
       y: LIMITS.LOWER,
-      direction: Directions.left
+      direction: Directions.right
     };
   }
   if (directMove.y < LIMITS.LOWER && directMove.x % 2 === 0) {
     return {
       x: directMove.x + 1,
-      y: -directMove.y - 1,
+      y: (2 * LIMITS.LOWER) - directMove.y - 1,
       direction: Directions.up
     };
   }
   if (directMove.y < LIMITS.LOWER && directMove.x % 2 !== 0) {
     return {
       x: directMove.x - 1,
-      y: -directMove.y - 1,
+      y: (2 * LIMITS.LOWER) - directMove.y - 1,
       direction: Directions.up
     };
   }

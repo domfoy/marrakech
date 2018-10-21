@@ -6,17 +6,25 @@ const {moveAssam} = require('../src/core/lib'),
 const tests = [
   // [input, expectation]
   // [[x, y, direction, shift], [x, y, direction]],
-  [[2, 6, Directions.left, 3], [0, 6, Directions.down]],
-  [[2, 2, Directions.left, 3], [0, 3, Directions.right]],
-  [[1, 3, Directions.left, 4], [2, 2, Directions.right]],
+  [[-1, 3, Directions.left, 3], [-3, 2, Directions.right]],
+  [[-1, -1, Directions.left, 3], [-3, -2, Directions.right]],
+  [[-2, 0, Directions.left, 4], [-1, 1, Directions.right]],
 
-  [[5, 0, Directions.right, 3], [6, 1, Directions.up]],
-  [[6, 1, Directions.right, 2], [5, 2, Directions.left]],
-  [[4, 2, Directions.right, 4], [5, 1, Directions.left]],
+  [[2, -3, Directions.right, 3], [2, -2, Directions.left]],
+  [[3, -2, Directions.right, 2], [2, -3, Directions.left]],
+  [[1, -1, Directions.right, 4], [2, 0, Directions.left]],
 
-  [[0, 6, Directions.up, 1], [0, 6, Directions.right]],
-  [[1, 6, Directions.up, 2], [2, 5, Directions.down]],
-  [[2, 6, Directions.up, 3], [1, 4, Directions.down]]
+  [[-3, 3, Directions.up, 1], [-2, 3, Directions.down]],
+  [[-2, 3, Directions.up, 2], [-3, 2, Directions.down]],
+  [[-1, 3, Directions.up, 3], [0, 1, Directions.down]],
+
+  [[0, -2, Directions.down, 3], [1, -2, Directions.up]],
+  [[1, -2, Directions.down, 3], [0, -2, Directions.up]],
+
+  [[3, 3, Directions.up, 3], [1, 3, Directions.left]],
+  [[3, 3, Directions.right, 3], [3, 1, Directions.down]],
+  [[-3, -3, Directions.down, 3], [-1, -3, Directions.right]],
+  [[-3, -3, Directions.left, 3], [-3, -1, Directions.up]],
 ];
 
 test('should move assam to the correct state', (t) => {
@@ -39,6 +47,6 @@ test('should move assam to the correct state', (t) => {
         y: tests[i][1][1]
       }
     };
-    t.deepEqual(moveAssam(assam, draw), expectation, `on iteration ${i}`);
+    t.deepEqual(moveAssam({assam}, draw), expectation, `on iteration ${i}`);
   }
 });
