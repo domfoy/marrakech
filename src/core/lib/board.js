@@ -1,10 +1,11 @@
 const _ = require('lodash');
 
-const {BOARD_SIDE_SIZE, BOARD_SIZE} = require('../../../models/Consts.js');
+const {BOARD_SIDE_SIZE, ColoursAsArray} = require('../../../models/Consts.js');
 
 module.exports = {
   computeColoursDomains,
-  computeFreeRugSpots
+  computeFreeRugSpots,
+  computeUncoveredRugs
 };
 
 function computeColoursDomains(layer) {
@@ -151,15 +152,12 @@ function computeFreeRugSpots(game) {
         })
         .map(extremity => convertToSpot(centralPosition, extremity));
     });
-    console.log('p', unflattenedSpots)
-  const ordered = _(unflattenedSpots)
+
+  return _(unflattenedSpots)
     .flatten()
     .sortBy(spot => (spot[0] * 12) + spot[1])
+    .map(convertToReadableSpot)
     .value();
-
-  console.log('ordered', ordered);
-
-  return ordered.map(convertToReadableSpot);
 }
 
 function coveringRugId(uncoveredRugs, position) {
@@ -205,4 +203,16 @@ function convertToCell(position) {
     throw new Error('no position');
   }
   return ((position.y + 3) * BOARD_SIDE_SIZE) + (position.x + 3);
+}
+
+function computeUncoveredRugs(game) {
+  const uncoveredRugs = game.board.uncoveredRugs;
+  const lastAction = _.last(game.actions);
+  const newSpot = _.map(lastAction.payload.positions, convertToCell);
+
+  const stillUncoveredRugs = _.reject(uncoveredRugs, (rug) => {
+    return _.intersection(rug.spot, newSpot).length;
+  });
+
+  return _.concat(stillUncoveredRugs, [{spot: newSpot, colourId: _.findIndex(ColoursAsArray, c => c === lastAction.meta.colour)}]);
 }

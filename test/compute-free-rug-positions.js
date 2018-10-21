@@ -77,7 +77,6 @@ test('should compute domains', (t) => {
     };
 
     const freeRugSpots = computeFreeRugSpots(game);
-    console.log(freeRugSpots);
     t.deepEqual(freeRugSpots, testOccurrence.expected);
   });
 });

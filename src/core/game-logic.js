@@ -3,6 +3,7 @@ const _ = require('lodash');
 const {ActionTypes} = require('../../models');
 const {
   computeColoursDomains,
+  computeUncoveredRugs,
   drawDice,
   moveAssam,
   payTax
@@ -73,9 +74,10 @@ function getNextColour(game) {
 }
 
 async function layRugPostProcess(game) {
-  const coloursDomains = computeColoursDomains(game.board.layer);
-
-  game.board.coloursDomains = coloursDomains;
+  game.board.coloursDomains = computeColoursDomains(game.board.layer);
+  const uncoveredRugs = computeUncoveredRugs(game);
+  console.log(uncoveredRugs);
+  game.board.uncoveredRugs = uncoveredRugs;
 
   if (isOver(game)) {
     return;

@@ -140,8 +140,7 @@ module.exports = function registerGame() {
       orientAssamPostProcess(this);
       break;
     case ActionTypes.LAY_RUG:
-      const colourId = _.findIndex(ColoursAsArray, action.colour);
-
+      const colourId = _.findIndex(ColoursAsArray, c => c === this.pendingAction.colour);
       this.board.layer[action.positions[0].x + 3 + ((action.positions[0].y + 3) * 7)] = colourId;
       this.board.layer[action.positions[1].x + 3 + ((action.positions[1].y + 3) * 7)] = colourId;
       this.actions.push({
