@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const {BOARD_SIDE_SIZE, Directions, Colours} = require('../../../models/Consts.js');
+const {BOARD_SIDE_SIZE, Directions, Colours, ColoursAsArray} = require('../../../models/Consts.js');
 
 const NEUTRAL_COLOR = Colours.NONE;
 const NO_TAX = 0;
@@ -177,13 +177,13 @@ function payTax(game) {
     p => p.colours.includes(colour)
   ).id;
 
-  const debtorId = _.last(game.actions).meta.playerId;
+  const debtorId = game.pendingAction.playerId;
   if (creditorId === debtorId) {
     return NO_TAX;
   }
-  const involvedColoursDomains = _.find(game.board.coloursDomains, ds => ds.colour === colour);
-  const involvedColoursDomain = _.find(involvedColoursDomains.domains, d => d.includes(cell));
-  let taxAmount = involvedColoursDomain.length;
+  const involvedColoursDomains = _.find(game.board.coloursDomains, ds => ds.colourId === _.findIndex(ColoursAsArray, c => c === colour));
+  const involvedColoursDomain = _.find(involvedColoursDomains.domains, d => d.cells.includes(cell));
+  let taxAmount = involvedColoursDomain.cells.length;
 
   const debtor = _.find(game.players, {id: debtorId});
   const creditor = _.find(game.players, {id: creditorId});

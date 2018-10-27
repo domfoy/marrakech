@@ -42,7 +42,6 @@ test('should handle complete user turn', async (t) => {
   return new Promise((resolve) => {
     let turn = 1;
     t.context.client.on('event:new_pending_action_set', (action) => {
-      console.log('new pending action', turn, action);
       t.truthy(action);
 
       if (turn < 2) {
