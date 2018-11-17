@@ -31,6 +31,7 @@ function formatGame(game) {
 }
 
 async function handleActionSubmitted(socket, game, actionSubmission) {
+  console.log('action submission received', actionSubmission);
   try {
     await game.applyAction(actionSubmission);
     if (game.isOver()) {
@@ -44,9 +45,14 @@ async function handleActionSubmitted(socket, game, actionSubmission) {
 }
 
 function formatNextActionContext(game) {
-  const context = _.pick(game, [
-    'pendingAction'
-  ]);
+  const context = {
+    pendingAction: {
+      turn: game.pendingAction.turnId,
+      playerId: game.pendingAction.playerId,
+      actionType: game.pendingAction.type,
+      colour: game.pendingAction.colour
+    }
+  };
   return context;
 }
 
